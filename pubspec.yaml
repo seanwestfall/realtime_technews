@@ -1,0 +1,19 @@
+name: realtime technews
+version: 0.0.0
+description: get tech news in realtime
+
+author: Sean Westfall
+homepage: fieldsofgoldfish.com
+
+dependencies:
+    # polymer: '>=0.15.1 <0.17.0'
+    polymer: '^0.16.0'
+    core_elements: '^0.6.1'
+    paper_elements: '^0.6.2'
+    route_hierarchical: '^0.6.0'
+
+transformers:
+- polymer:
+    entry_points: web/index.html
+- $dart2js:
+    $include: '**/*.polymer.bootstrap.dart'
