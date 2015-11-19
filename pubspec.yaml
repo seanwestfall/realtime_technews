@@ -6,7 +6,8 @@ author: Sean Westfall
 homepage: fieldsofgoldfish.com
 
 dependencies:
-    # polymer: '>=0.15.1 <0.17.0'
+    # polymer: '>=0.15.1 <0.17.0o
+    browser: ">=0.10.0 <0.11.0"
     polymer: '^0.16.0'
     core_elements: '^0.6.1'
     paper_elements: '^0.6.2'
@@ -14,6 +15,6 @@ dependencies:
 
 transformers:
 - polymer:
-    entry_points: web/index.html
+    entry_points: lib/src/main.tpl
 - $dart2js:
     $include: '**/*.polymer.bootstrap.dart'

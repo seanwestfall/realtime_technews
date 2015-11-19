@@ -1,0 +1,20 @@
+name: polymer_spa_example
+version: 0.0.1
+description: A simple example of a full polymer app with multiple pages.
+author: Dart Team <misc@dartlang.org>
+homepage: https://github.com/dart-lang/polymer-spa-example
+
+environment:
+  sdk: '>=1.9.0-dev.7.1 <2.0.0'
+
+dependencies:
+  polymer: '^0.16.0'
+  core_elements: '^0.6.1'
+  paper_elements: '^0.6.2'
+  route_hierarchical: "^0.6.0"
+
+transformers:
+- polymer:
+    entry_points: web/index.html
+- $dart2js:
+    $include: "**/*.polymer.bootstrap.dart"

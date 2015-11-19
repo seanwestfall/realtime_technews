@@ -14,28 +14,34 @@
  */
 package main
 
-// Title of SPA
-const spaTitle string = "RealTime Tech News"
-const indexFile string = "index.html"
-const contentFile string = "main.tpl"
-
 import (
-	"flag"			// command parser
-    "fmt"           // standard
-    "io/ioutil"     // io lib
-    "html/template" // allows for html templates to be imported
+  "flag"			// command parser
+  "fmt"           // standard
+  "io/ioutil"     // io lib
+  "html/template" // allows for html templates to be imported
 	"net"
-    "net/http"      // the server 
+  "net/http"      // the server 
 
 	"log"			// log errors
 
-    //"golang.org/x/net/websocket" // the websocket library
+  //"golang.org/x/net/websocket" // the websocket library
 )
+
+// Title of SPA
+const spaTitle string = "RealTime Tech News"
+const indexFile string = "index.html"
+const contentFile string = "lib/src/main.tpl"
+
+var (
+  addr = flag.Bool("addr", false, "find open address and print to final-port.txt")
+)
+
 
 // The data structure that holds a page
 type Page struct {
     Title string // title of the page
-    Body []byte // HTML body
+    Body []byte // body in bytes
+    Template template.HTML // body in html
 }
 
 // The function that loads an html page
@@ -44,17 +50,17 @@ func loadPage(filename string, title string) (*Page, error) {
     if err != nil {
         return nil, err
     }
-    return &Page{Title: title, Boby: body}, nil
+    return &Page{Title: title, Body: body, Template: template.HTML(body)}, nil
 }
 
 // template cache
 // (add to this list to cache)
-var templates = template.Must(template.ParseFiles("index.html"))
+var templates = template.Must(template.ParseFiles(indexFile))
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
 	err := templates.ExecuteTemplate(w, tmpl, p)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerErrors
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -62,21 +68,21 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
 //var validPath = regexp.MustCompile("^/validpaths/([a-zA-Z0-9]+)$")
 
 // a generic handler maker (TODO: needs work)
-func makeHandler(fn func(http.ResponseWriter, *http.Request, string, string)) http.HandlerFunc {
+func makeHandler(fn func(http.ResponseWriter, *http.Request)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		//m := validPath.FindStringSubmatch(r.URL.Path)
-    	//if m == nil {
-    	//	http.NotFound(w, r)
-    	//	return
-    	//}
-    	//fn(w, r, m[2])
+    //if m == nil {
+    //	http.NotFound(w, r)
+    //	return
+    //}
+    //fn(w, r, m[2])
 
 		// this is a temp comment out until the generic handler is developed further
 		fn(w, r)
 	}
 }
 
-/* 
+/*
  * This is the main index page
  * the content and title are defined in the const definitions above
  * - contentFile
@@ -113,6 +119,7 @@ func main() {
 		return
 	}
 	
-	// start the http server
-    http.ListenAndServe(":8080", nil) // listen on port 8080
+  // start the http server
+  fmt.Printf("Server to PORT: 8080\n")
+  http.ListenAndServe(":8080", nil) // listen on port 8080
 }
